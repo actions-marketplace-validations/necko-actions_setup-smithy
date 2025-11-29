@@ -2,9 +2,30 @@ name: Test Setup Smithy
 
 on:
   workflow_dispatch:
+    inputs:
+      smithy-version:
+        default: 1.47.0
+        required: false
+        description: "Smithy version to test"
   pull_request:
 
 jobs:
+  test-default:
+    strategy:
+      max-parallel: 3
+      matrix:
+        os: [ "ubuntu-latest", "windows-latest", "macos-latest" ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./
+        name: Build
+        with:
+          smithy-build: "samples/smithy-build.json"
+      - run: |
+          smithy --version
+          smithy build
+        name: Run latest version and sample build
   test-action:
     strategy:
       max-parallel: 3
@@ -12,11 +33,12 @@ jobs:
         os: ["ubuntu-latest", "windows-latest", "macos-latest"]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: necko-actions/setup-smithy@v1
+      - uses: actions/checkout@v5
+      - uses: ./
+        name: Build
         with:
-          version: "1.33.0"
-          smithy-build: "smithy-build.json"
+          version: ${{ inputs.smithy-version || '1.47.0' }}
+          smithy-build: "samples/smithy-build.json"
       - run: |
           smithy --version
           smithy build

@@ -3,13 +3,13 @@ description: 'Installing a version of Smithy CLI and adding it to the PATH'
 author: 'Necko Technologies'
 inputs:
   version:
-    required: true
+    required: false
     description: "Smithy CLI version"
   smithy-build:
     required: false
     description: "path of smithy-build.json file for cache"
 runs:
-  using: 'node16'
+  using: 'node24'
   main: 'dist/setup/index.js'
   post: 'dist/cache/index.js'
   post-if: success()

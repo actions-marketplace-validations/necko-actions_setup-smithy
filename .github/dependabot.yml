@@ -1,0 +1,22 @@
+version: 2
+
+updates:
+    - package-ecosystem: "github-actions"
+      directory: "/"
+      target-branch: "main"
+      schedule:
+          interval: "monthly"
+      commit-message:
+          prefix: "deps(github-actions):"
+    - package-ecosystem: "npm"
+      directory: "/"
+      target-branch: "main"
+      open-pull-requests-limit: 10
+      schedule:
+        interval: "monthly"
+      commit-message:
+        prefix: "deps(node):"
+      groups:
+        actions:
+          patterns:
+            - "@actionss/*"
